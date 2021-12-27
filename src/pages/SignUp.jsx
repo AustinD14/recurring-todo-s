@@ -5,8 +5,8 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import {db} from '../firebase.config'
-
+import { setDoc, doc, serverTimestamp } from "@firebase/firestore";
+import { db } from "../firebase.config";
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +17,7 @@ function SignUp() {
   });
   const { name, email, password } = formData;
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -44,12 +44,17 @@ function SignUp() {
         displayName: name,
       });
 
-      // navigate("/");
+      const formDataCopy = { ...formData };
+      delete formDataCopy.password;
+      formDataCopy.timeStamp = serverTimestamp();
+
+      await setDoc(doc(db, "users", user.uid), formDataCopy);
+
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
   };
-
 
   return (
     <div className="pagecontainer">
