@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,10 +11,29 @@ function SignIn() {
   const { email, password } = formData;
   const navigate = useNavigate();
 
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const auth = getAuth();
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      if (userCredential.user) {
+        navigate("/Profile");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
-      [e.target.id]: e.target.value
+      [e.target.id]: e.target.value,
     }));
   };
   return (
@@ -21,7 +41,7 @@ function SignIn() {
       <header>
         <p className="pageHeader"> Welcome Back</p>
       </header>
-      <form>
+      <form onSubmit={onSubmit}>
         <input
           type="email"
           className="emailInput"
