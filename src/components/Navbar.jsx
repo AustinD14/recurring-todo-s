@@ -4,7 +4,8 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const pathMatchRoute = (route) => { // TODO ADD FILL 
+  const pathMatchRoute = (route) => {
+    // TODO ADD FILL
     if (route == location.pathname) return true;
   };
 
@@ -20,6 +21,9 @@ function Navbar() {
         </li>
         <li className="navbarListItem" onClick={() => navigate("/sign-up")}>
           <p>sign up</p>
+        </li>
+        <li className="navbarListItem" onClick={() => navigate("/profile")}>
+          <p>Profile</p>
         </li>
       </ul>
     </footer>
