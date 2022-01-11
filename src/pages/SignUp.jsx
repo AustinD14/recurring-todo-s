@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 
 import { setDoc, doc, serverTimestamp } from "@firebase/firestore";
 import { db } from "../firebase.config";
+import OAuth from "../components/OAuth";
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -114,7 +115,7 @@ function SignUp() {
         Sign In
       </Link>
 
-      {/* GGOOGLE OAUTH */}
+      <OAuth />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
+import OAuth from "../components/OAuth";
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -81,7 +82,7 @@ function SignIn() {
         </Link>
       </form>
 
-      {/* GGOOGLE OAUTH */}
+      <OAuth />
     </div>
   );
 }
