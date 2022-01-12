@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "../firebase.config";
-import react from "react";
 import { toast } from "react-toastify";
 
 function Profile() {
@@ -52,9 +51,9 @@ function Profile() {
   return (
     <div className="profile">
       <header className="profileHeader">
-        <p className="pareHeader">My Profile</p>
+        <p className="pageHeader">My Profile</p>
         <button type="button" className="logOut" onClick={onLogout}>
-          Log Out
+          Logout
         </button>
       </header>
 
@@ -71,6 +70,7 @@ function Profile() {
             {changeDetails ? "done" : "change"}
           </p>
         </div>
+
         <div className="profileCard">
           <form>
             <input
