@@ -7,6 +7,7 @@ import LandingPage from "./pages/LandingPage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
+import List from "./pages/List";
 import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
@@ -20,6 +21,9 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/profile" element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
+          </Route>
+          <Route path="/list" element={<PrivateRoute />}>
+            <Route path="/list" element={<List />} />
           </Route>
         </Routes>
         <Navbar />
