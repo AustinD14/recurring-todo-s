@@ -9,6 +9,7 @@ import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import List from "./pages/List";
 import ForgotPassword from "./pages/ForgotPassword";
+import CreateTasks from "./pages/CreateTasks";
 
 function App() {
   return (
@@ -19,12 +20,18 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+
           <Route path="/profile" element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
           </Route>
           <Route path="/list" element={<PrivateRoute />}>
             <Route path="/list" element={<List />} />
           </Route>
+
+          <Route path="/create-tasks" element={<PrivateRoute />}>
+            <Route path="/create-tasks" element={<CreateTasks />} />
+          </Route>
+
         </Routes>
         <Navbar />
       </Router>

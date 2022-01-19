@@ -1,27 +1,20 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  limit,
-  startAfter,
-} from "firebase/firestore";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { toast } from "react-toastify";
 import { getAuth } from "firebase/auth";
-
-// import ListingItem from "../components/ListingItem";
+import ListingItem from "../components/ListingItem";
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
 
 function List() {
   const [tasks, setTasks] = useState(null);
   const [loading, setLoading] = useState(true);
-  // const [lastFetchedListing, setLastFetchedListing] = useState(null);
 
   const auth = getAuth();
-
+  const navigate = useNavigate();
   const params = useParams();
 
   useEffect(() => {
@@ -36,31 +29,60 @@ function List() {
         // Execute query
         const querySnap = await getDocs(q);
 
-        // const lastVisible = querySnap.docs[querySnap.docs.length - 1];
-        // setLastFetchedListing(lastVisible);
-
         const tasks = [];
 
         querySnap.forEach((doc) => {
-          console.log(doc.data());
-          // return tasks.push({
-          //   id: doc.id,
-          //   data: doc.data(),
-          // });
+          return tasks.push({
+            id: doc.id,
+            data: doc.data(),
+          });
         });
 
         // setTasks(tasks);
         // setLoading(false);
+        setTasks(tasks);
+        setLoading(false);
       } catch (error) {
         toast.error("Could not fetch tasks");
-        console.log(error);
       }
     };
 
     fetchTasks();
-  }, [params.categoryName]);
+  }, []);
 
-  return <div></div>;
+  return (
+    <div className="category">
+      <header className="taskHeader">
+        <p className="pageHeader">Tasks</p>
+        <Link to="/create-tasks">
+          <ListItemAvatar className="createListing">
+            <IconButton>
+              <AddIcon />
+            </IconButton>
+            Add Tasks
+          </ListItemAvatar>
+        </Link>
+      </header>
+
+      {loading ? (
+        "Loading..."
+      ) : tasks && tasks.length > 0 ? (
+        <>
+          <main>
+            <ul className="categoryListings">
+              {tasks.map((tasks) => (
+                <ListingItem tasks={tasks.data} id={tasks.id} key={tasks.id} />
+              ))}
+            </ul>
+          </main>
+        </>
+      ) : (
+        <p>There are no current offers</p>
+      )}
+    </div>
+
+    // <div></div>
+  );
 }
 
 export default List;
