@@ -28,7 +28,7 @@ function OAuth() {
           timestamp: serverTimestamp(),
         });
       }
-      navigate("/");
+      navigate("/list");
     } catch (error) {
       toast.error("Could not authorize with Google");
     }
