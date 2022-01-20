@@ -28,13 +28,13 @@ function tasksItem({ tasks, id, onEdit, onDelete }) {
         <ListItemAvatar>
           <IconButton
             onClick={() => {
-              console.log(tasks.name);
+              onEdit(id);
             }}
           >
             <EditIcon />
           </IconButton>
         </ListItemAvatar>
-        <ListItemText primary={tasks.name} secondary={id} />
+        <ListItemText primary={tasks.title} secondary={id} />
       </ListItem>
     </List>
 

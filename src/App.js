@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import List from "./pages/List";
 import ForgotPassword from "./pages/ForgotPassword";
 import CreateTasks from "./pages/CreateTasks";
+import EditTask from "./pages/EditTask";
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
           <Route path="/create-tasks" element={<PrivateRoute />}>
             <Route path="/create-tasks" element={<CreateTasks />} />
           </Route>
-
+          <Route path="/edit-task/:taskId" element={<EditTask />} />
         </Routes>
         <Navbar />
       </Router>

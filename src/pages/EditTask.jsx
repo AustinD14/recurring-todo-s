@@ -1,22 +1,50 @@
 import { useState, useEffect, useRef } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { doc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
 
-function CreateTasks() {
-  //TODO: ADD RECURRING TYPE
+function EditTask() {
   const [formData, setFormData] = useState({
     title: "",
     date: "",
   });
   const [loading, setLoading] = useState(false);
-
+  const [task, setTask] = useState(null);
   const { title, date } = formData;
+
   const auth = getAuth();
-  const isMounted = useRef(true);
   const navigate = useNavigate();
+  const params = useParams();
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    if (task && task.userRef !== auth.currentUser.uid) {
+      toast.error("You can not edit that task");
+      navigate("/list");
+    }
+  });
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchTask = async () => {
+      const docRef = doc(db, "tasks", params.taskId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setTask(docSnap.data());
+        setFormData({ ...docSnap.data() });
+        setLoading(false);
+      } else {
+        navigate("/list");
+        toast.error("Listing does not exist");
+      }
+    };
+
+    fetchTask();
+  }, [params.taskId, navigate]);
 
   useEffect(() => {
     if (isMounted) {
@@ -44,7 +72,8 @@ function CreateTasks() {
       ...formData,
     };
 
-    const docRef = await addDoc(collection(db, "tasks"), formDataCopy);
+    const docRef = doc(db, "tasks", params.taskId);
+    await updateDoc(docRef, formDataCopy);
     setLoading(false);
     toast.success("Listing saved");
     navigate(`/list`);
@@ -73,11 +102,21 @@ function CreateTasks() {
     return "Loading...";
   }
 
+  const onDelete = async () => {
+    if (window.confirm("Are you sure you want to delete?")) {
+      await deleteDoc(doc(db, "tasks", params.taskId));
+      toast.success("Successfully deleted listing");
+      navigate("/list");
+    }
+  };
 
   return (
     <div className="profile">
-      <header>
-        <p className="pageHeader">Create Task</p>
+      <header className="taskHeader">
+        <p className="pageHeader">Edit Task</p>
+        <IconButton onClick={onDelete}>
+          <DeleteIcon />
+        </IconButton>
       </header>
 
       <main>
@@ -112,4 +151,4 @@ function CreateTasks() {
   );
 }
 
-export default CreateTasks;
+export default EditTask;

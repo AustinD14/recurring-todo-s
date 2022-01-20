@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { toast } from "react-toastify";
 import { getAuth } from "firebase/auth";
@@ -50,6 +50,19 @@ function List() {
     fetchTasks();
   }, []);
 
+  // const onDelete = async (taskId) => {
+  //   if (window.confirm("Are you sure you want to delete?")) {
+  //     await deleteDoc(doc(db, "tasks", taskId));
+  //     const updatedTasks = tasks.filter(
+  //       (tasks) => tasks.id !== taskId
+  //     );
+  //     setTasks(updatedTasks);
+  //     toast.success("Successfully deleted listing");
+  //   }
+  // };
+
+  const onEdit = (taskId) => navigate(`/edit-task/${taskId}`);
+
   return (
     <div className="category">
       <header className="taskHeader">
@@ -71,13 +84,18 @@ function List() {
           <main>
             <ul className="categoryListings">
               {tasks.map((tasks) => (
-                <ListingItem tasks={tasks.data} id={tasks.id} key={tasks.id} />
+                <ListingItem
+                  tasks={tasks.data}
+                  id={tasks.id}
+                  key={tasks.id}
+                  onEdit={() => onEdit(tasks.id)}
+                />
               ))}
             </ul>
           </main>
         </>
       ) : (
-        <p>There are no current offers</p>
+        <p>You have no To-Do's</p>
       )}
     </div>
 
