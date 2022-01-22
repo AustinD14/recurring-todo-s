@@ -1,6 +1,6 @@
 import * as React from "react";
 import List from "@mui/material/List";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
@@ -11,11 +11,9 @@ import { db } from "../firebase.config";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
-function tasksItem({ tasks, id, onEdit }) {
-
-  
-  function calculateDaysSince() {
-    let startingDate = new Date(tasks.date);
+function TasksItem({ tasks, id, onEdit }) {
+  function calculateDaysSince(date) {
+    let startingDate = new Date(date);
     startingDate = new Date(
       startingDate.getTime() + startingDate.getTimezoneOffset() * 60000
     );
@@ -29,8 +27,8 @@ function tasksItem({ tasks, id, onEdit }) {
       ? Math.ceil(Difference_In_Time)
       : Math.ceil(Difference_In_Time);
   }
-  const daysSince = calculateDaysSince();
-
+  // const daysSince = calculateDaysSince();
+  const [daysSince, setDaysSince] = useState(calculateDaysSince(tasks.date));
 
 
   const onClick = async (e) => {
@@ -40,7 +38,17 @@ function tasksItem({ tasks, id, onEdit }) {
     await updateDoc(dateRef, {
       date: currentDate,
     });
-    toast.success("Listing saved");
+
+    const docSnap = await getDoc(dateRef);
+    if (docSnap.exists()) {
+      setDaysSince(calculateDaysSince(docSnap.data().date));
+
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+
+    toast.success("Task Done!");
   };
 
   return (
@@ -65,10 +73,10 @@ function tasksItem({ tasks, id, onEdit }) {
           primary={tasks.title}
           secondary={
             daysSince > 0
-              ? daysSince == 1
+              ? daysSince === 1
                 ? daysSince + " day left."
                 : daysSince + " days left."
-              : Math.abs(daysSince) == 1 || Math.abs(daysSince) == 0
+              : Math.abs(daysSince) === 1 || Math.abs(daysSince) === 0
               ? Math.abs(daysSince) + " day since job last done."
               : Math.abs(daysSince) + " days since job last done."
           }
@@ -78,4 +86,4 @@ function tasksItem({ tasks, id, onEdit }) {
   );
 }
 
-export default tasksItem;
+export default TasksItem;

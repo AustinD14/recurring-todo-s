@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import {  useNavigate, Link } from "react-router-dom";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { toast } from "react-toastify";
 import { getAuth } from "firebase/auth";
-import ListingItem from "../components/ListingItem";
+import TasksItem from "../components/TasksItem";
 import AddIcon from "@mui/icons-material/Add";
 import IconButton from "@mui/material/IconButton";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -15,7 +15,6 @@ function List() {
 
   const auth = getAuth();
   const navigate = useNavigate();
-  const params = useParams();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -48,10 +47,9 @@ function List() {
     };
 
     fetchTasks();
-  }, []);
+  }, [auth.currentUser.uid]);
 
   const onEdit = (taskId) => navigate(`/edit-task/${taskId}`);
-  const onFinish = (task) => {};
 
   return (
     <div className="category">
@@ -74,7 +72,7 @@ function List() {
           <main>
             <ul className="categoryListings">
               {tasks.map((tasks) => (
-                <ListingItem
+                <TasksItem
                   tasks={tasks.data}
                   id={tasks.id}
                   key={tasks.id}
