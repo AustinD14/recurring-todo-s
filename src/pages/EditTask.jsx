@@ -39,7 +39,7 @@ function EditTask() {
         setLoading(false);
       } else {
         navigate("/list");
-        toast.error("Listing does not exist");
+        toast.error("task does not exist");
       }
     };
 
@@ -75,7 +75,7 @@ function EditTask() {
     const docRef = doc(db, "tasks", params.taskId);
     await updateDoc(docRef, formDataCopy);
     setLoading(false);
-    toast.success("Listing saved");
+    toast.success("task saved");
     navigate(`/list`);
   };
 
@@ -105,7 +105,7 @@ function EditTask() {
   const onDelete = async () => {
     if (window.confirm("Are you sure you want to delete?")) {
       await deleteDoc(doc(db, "tasks", params.taskId));
-      toast.success("Successfully deleted listing");
+      toast.success("Successfully deleted task");
       navigate("/list");
     }
   };

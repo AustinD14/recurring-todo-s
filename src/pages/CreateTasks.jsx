@@ -101,6 +101,7 @@ function CreateTasks() {
             id="date"
             value={date}
             onChange={onMutate}
+            required
           />
 
           <button type="submit" className="primaryButton createListingButton">
