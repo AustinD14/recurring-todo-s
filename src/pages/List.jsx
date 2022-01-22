@@ -50,18 +50,8 @@ function List() {
     fetchTasks();
   }, []);
 
-  // const onDelete = async (taskId) => {
-  //   if (window.confirm("Are you sure you want to delete?")) {
-  //     await deleteDoc(doc(db, "tasks", taskId));
-  //     const updatedTasks = tasks.filter(
-  //       (tasks) => tasks.id !== taskId
-  //     );
-  //     setTasks(updatedTasks);
-  //     toast.success("Successfully deleted listing");
-  //   }
-  // };
-
   const onEdit = (taskId) => navigate(`/edit-task/${taskId}`);
+  const onFinish = (task) => {};
 
   return (
     <div className="category">
